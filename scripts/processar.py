@@ -87,7 +87,7 @@ def classificar(df: pd.DataFrame, nr_flavio: int, nr_lula: int) -> pd.DataFrame:
         return res
 
     t1, t2 = turno(1), turno(2)
-    m = t1.join(t2, lsuffix="_1t", rsuffix="_2t", how="outer")
+    m = t1.add_suffix("_1t").join(t2.add_suffix("_2t"), how="outer")
     if m.isna().any().any():
         faltando = m[m.isna().any(axis=1)].index.tolist()
         raise SystemExit(f"Municípios presentes em só um dos turnos: {faltando[:20]}")
@@ -133,6 +133,10 @@ def main(argv=None) -> int:
     m = classificar(df, nr_f, nr_l).join(nomes, on="CD_MUNICIPIO")
 
     cw = pd.read_csv(a.crosswalk, dtype={"codigo_ibge": str})
+    # Municípios ausentes da tabela pública (ex.: criados após 2020), mantidos à mão
+    extra = ROOT / "data" / "crosswalk_extra.csv"
+    if extra.exists():
+        cw = pd.concat([cw, pd.read_csv(extra, dtype={"codigo_ibge": str})]).drop_duplicates("codigo_tse", keep="last")
     m = m.merge(cw[["codigo_tse", "codigo_ibge"]], left_on="CD_MUNICIPIO", right_on="codigo_tse", how="left")
     sem_par = m[m["codigo_ibge"].isna()]
     if not sem_par.empty:
