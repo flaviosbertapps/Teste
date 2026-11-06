@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viradas no 2º turno</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Onde Flávio liderou e perdeu no 2º turno</h1>
+  <p class="sub">Presidente 2026 — municípios em que Flávio Bolsonaro foi o mais votado no 1º turno e ficou atrás de Lula no 2º turno.</p>
+</header>
+
+<main>
+  <section class="mapa-wrap">
+    <div class="controles">
+      <label><input type="radio" name="modo" value="destaque" checked> Só as viradas</label>
+      <label><input type="radio" name="modo" value="todas"> Todas as categorias</label>
+    </div>
+    <svg id="mapa" role="img" aria-label="Mapa dos municípios do Brasil"></svg>
+    <ul id="legenda" class="legenda"></ul>
+    <div id="tooltip" class="tooltip" hidden></div>
+  </section>
+
+  <aside>
+    <div class="kpis">
+      <div><span id="k-n">–</span><small>municípios com virada</small></div>
+      <div><span id="k-v">–</span><small>votos válidos no 2º turno nesses municípios</small></div>
+      <div><span id="k-p">–</span><small>do total nacional de válidos</small></div>
+    </div>
+    <div class="filtro">
+      <label>UF <select id="uf"><option value="">Todas</option></select></label>
+      <input id="busca" type="search" placeholder="Buscar município">
+    </div>
+    <div class="tabela-wrap">
+      <table id="tabela">
+        <thead><tr>
+          <th data-k="n">Município</th><th data-k="uf">UF</th>
+          <th data-k="p1" class="num">Flávio 1º</th><th data-k="p2" class="num">Flávio 2º</th>
+          <th data-k="dm" class="num">Δ margem</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <h2>Metodologia</h2>
+  <ul>
+    <li><b>Liderou no 1º turno</b>: Flávio foi o candidato mais votado do município (1º lugar isolado).</li>
+    <li><b>Ficou atrás no 2º turno</b>: Lula teve mais votos que Flávio no município.</li>
+    <li>Percentuais calculados sobre votos válidos. No 2º turno o percentual de Flávio quase sempre <em>sobe</em>, porque só restam dois candidatos; por isso a perda de terreno é medida pela <b>margem entre os dois finalistas</b>: (Flávio − Lula) ÷ (Flávio + Lula), comparada entre os turnos (Δ margem, em pontos).</li>
+    <li>Votos no exterior não aparecem no mapa. Alguns municípios criados recentemente podem não ter polígono na malha usada.</li>
+    <li>Mapa conta municípios, não eleitores: muitos municípios pequenos pesam visualmente mais que seu eleitorado.</li>
+    <li id="fonte">Fonte: TSE (dados abertos), malha IBGE.</li>
+  </ul>
+</footer>
+
+<script src="vendor/d3.min.js"></script>
+<script src="vendor/topojson-client.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
